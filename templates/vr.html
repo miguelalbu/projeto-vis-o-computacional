@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cena VR – Mundo Virtual</title>
+
+  <!-- A-Frame: motor de Realidade Virtual no browser -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+  <!-- Componente look-at: faz entidades "olharem" para a câmera -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ── Navbar ───────────────────────────────────────────────────── -->
+<nav class="navbar vr-nav">
+  <a href="/" class="nav-brand">🥽 Realidade Mista</a>
+  <div class="nav-links">
+    <a href="/">Início</a>
+    <a href="/camera">📷 Câmera</a>
+    <a href="/vr" class="active">🕶️ Cena VR</a>
+  </div>
+  <div class="vr-hud">
+    <span class="ws-status" id="wsStatus">⚫ Desconectado</span>
+    <span class="avatar-badge">👤 <span id="avatarCount">0</span> avatar(s)</span>
+  </div>
+</nav>
+
+<!-- ── Cena A-Frame ─────────────────────────────────────────────── -->
+<a-scene
+  id="scene"
+  embedded
+  style="height: calc(100vh - 48px); width: 100vw; display: block;"
+  renderer="antialias: true; colorManagement: true"
+  loading-screen="dotsColor: white; backgroundColor: #0a0a1e">
+
+  <!-- Câmera do usuário (WASD + mouse) -->
+  <a-entity id="rig" position="0 1.6 8">
+    <a-camera wasd-controls look-controls>
+      <!-- Mira central para referência -->
+      <a-cursor color="#ffffff" opacity="0.5"></a-cursor>
+    </a-camera>
+  </a-entity>
+
+  <!-- ── Iluminação ───────────────────────────────────────────── -->
+  <a-light type="ambient"     color="#223" intensity="0.8"></a-light>
+  <a-light type="directional" color="#aac" intensity="1.0" position="2 6 3"></a-light>
+  <!-- Luz de preenchimento frontal para iluminar os avatares -->
+  <a-light type="point" color="#5588ff" intensity="0.6" position="0 3 5"></a-light>
+
+  <!-- ── Chão ────────────────────────────────────────────────── -->
+  <a-plane
+    rotation="-90 0 0"
+    width="40" height="40"
+    material="color: #0d0d20; roughness: 0.95"
+    shadow="receive: true">
+  </a-plane>
+
+  <!-- Grade de referência no chão (linhas) -->
+  <a-entity id="grade-chao">
+    <!-- Linhas horizontais -->
+    <a-entity mixin="linha" position="0 0.01 -5"  rotation="-90 0 0"></a-entity>
+    <a-entity mixin="linha" position="0 0.01  0"  rotation="-90 0 0"></a-entity>
+    <a-entity mixin="linha" position="0 0.01  5"  rotation="-90 0 0"></a-entity>
+    <a-entity mixin="linha" position="0 0.01  10" rotation="-90 0 0"></a-entity>
+    <!-- Linhas verticais -->
+    <a-entity mixin="linha" position="-6 0.01 2" rotation="-90 90 0"></a-entity>
+    <a-entity mixin="linha" position="-3 0.01 2" rotation="-90 90 0"></a-entity>
+    <a-entity mixin="linha" position=" 0 0.01 2" rotation="-90 90 0"></a-entity>
+    <a-entity mixin="linha" position=" 3 0.01 2" rotation="-90 90 0"></a-entity>
+    <a-entity mixin="linha" position=" 6 0.01 2" rotation="-90 90 0"></a-entity>
+  </a-entity>
+
+  <!-- Mixins reutilizáveis -->
+  <a-assets>
+    <a-mixin id="linha"
+      geometry="primitive: plane; width: 20; height: 0.02"
+      material="color: #1a1a3a; emissive: #1a1a3a; side: double">
+    </a-mixin>
+  </a-assets>
+
+  <!-- Marcador de origem (ponto de referência central) -->
+  <a-ring
+    position="0 0.02 0"
+    rotation="-90 0 0"
+    radius-inner="0.2" radius-outer="0.35"
+    material="color: #3344aa; emissive: #1122aa; opacity: 0.8">
+  </a-ring>
+  <a-text
+    value="ORIGEM"
+    position="0 0.05 0.5"
+    rotation="-90 0 0"
+    align="center"
+    color="#3344aa"
+    scale="0.4 0.4 0.4">
+  </a-text>
+
+  <!-- Parede de fundo para dar profundidade à cena -->
+  <a-plane
+    position="0 4 -8"
+    width="30" height="10"
+    material="color: #080818; roughness: 1; opacity: 0.8">
+  </a-plane>
+
+  <!-- Texto de espera (visível quando não há avatares) -->
+  <a-text
+    id="textoEspera"
+    value="Aguardando detecção de rostos...\nAbra /camera em outro dispositivo"
+    position="0 2.5 0"
+    align="center"
+    color="#334488"
+    scale="1.2 1.2 1.2"
+    wrap-count="30">
+  </a-text>
+
+  <!-- Eixos de referência (X = vermelho, Z = azul) -->
+  <a-entity>
+    <!-- Eixo X -->
+    <a-cylinder position="3 0.02 0"  rotation="0 0 90" radius="0.02" height="6"
+      material="color:#cc2222; emissive:#660000"></a-cylinder>
+    <!-- Eixo Z -->
+    <a-cylinder position="0 0.02 -2" rotation="0 0 0"  radius="0.02" height="6"
+      material="color:#2222cc; emissive:#000066"></a-cylinder>
+  </a-entity>
+  <a-text value="X" position="6.2 0.1 0" color="#cc2222" scale="0.5 0.5 0.5"></a-text>
+  <a-text value="Z" position="0 0.1 -5.2" color="#2222cc" scale="0.5 0.5 0.5"></a-text>
+
+  <!-- ── Contentor de avatares (manipulado por vr.js) ─────────── -->
+  <a-entity id="avatares"></a-entity>
+
+  <!-- Céu escuro com tom azulado -->
+  <a-sky color="#050512"></a-sky>
+
+</a-scene>
+
+<script src="/static/js/vr.js"></script>
+</body>
+</html>

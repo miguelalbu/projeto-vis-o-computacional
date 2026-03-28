@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Câmera – Mundo Real</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body class="camera-page">
+
+<!-- ── Navbar ─────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <a href="/" class="nav-brand">🥽 Realidade Mista</a>
+  <div class="nav-links">
+    <a href="/">Início</a>
+    <a href="/camera" class="active">📷 Câmera</a>
+    <a href="/vr">🕶️ Cena VR</a>
+  </div>
+  <span class="ws-status" id="wsStatus">⚫ Desconectado</span>
+</nav>
+
+<!-- ── Layout principal ───────────────────────────────────────── -->
+<div class="cam-layout">
+
+  <!-- Coluna esquerda: controles -->
+  <aside class="cam-sidebar">
+
+    <div class="card">
+      <div class="card-title">📷 Câmera</div>
+      <button id="btnStart" class="btn btn-green" onclick="iniciarCamera()">▶ Iniciar</button>
+      <button id="btnStop"  class="btn btn-red"   onclick="pararCamera()" disabled>⏹ Parar</button>
+
+      <div class="fps-row">
+        <label>FPS:</label>
+        <input type="range" id="fpsRange" min="1" max="10" value="5">
+        <span id="fpsVal">5</span>
+      </div>
+    </div>
+
+    <!-- Contador de rostos em destaque -->
+    <div class="card card-face-count">
+      <div class="face-count-label">Rostos detectados</div>
+      <div class="face-count-num" id="faceCount">0</div>
+    </div>
+
+    <!-- Lista de pessoas detectadas com coords VR -->
+    <div class="card" style="flex:1;overflow:hidden;display:flex;flex-direction:column">
+      <div class="card-title">📡 Posições VR</div>
+      <div id="vrList" class="vr-list">
+        <p class="muted">Aguardando rostos…</p>
+      </div>
+    </div>
+
+    <!-- Log de eventos -->
+    <div class="card">
+      <div class="card-title">📜 Log</div>
+      <div id="logPanel" class="log-panel"></div>
+    </div>
+
+  </aside>
+
+  <!-- Coluna direita: vídeos -->
+  <div class="cam-videos">
+
+    <!-- Fonte (câmera ao vivo) -->
+    <div class="video-section">
+      <div class="video-label">🎥 Fonte (câmera)</div>
+      <div class="video-box">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="captureCanvas" style="display:none"></canvas>
+        <div class="no-signal" id="noSignal">
+          <span>📷</span>
+          <small>Inicie a câmera</small>
+        </div>
+        <div class="fps-badge" id="fpsBadge" style="display:none">0 fps</div>
+      </div>
+    </div>
+
+    <!-- Resultado (frame anotado pelo servidor) -->
+    <div class="video-section">
+      <div class="video-label">🔬 Resultado (OpenCV)</div>
+      <div class="video-box">
+        <img id="resultImg" style="display:none" alt="frame processado">
+        <div class="no-signal" id="noResult">
+          <span>🔬</span>
+          <small>Aguardando processamento…</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/static/js/camera.js"></script>
+</body>
+</html>

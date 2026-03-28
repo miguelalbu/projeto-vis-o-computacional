@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Realidade Mista – AR/VR</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="home-wrapper">
+
+  <header class="home-header">
+    <div class="home-icon">🥽</div>
+    <h1>Realidade Mista</h1>
+    <p class="home-subtitle">
+      O mundo real alimenta o mundo virtual em tempo real.<br>
+      Cada rosto detectado vira um avatar 3D na cena VR.
+    </p>
+  </header>
+
+  <!-- Cards de acesso -->
+  <div class="home-cards">
+
+    <!-- Câmera -->
+    <a href="/camera" class="home-card home-card--camera">
+      <div class="card-icon">📷</div>
+      <div class="card-body">
+        <h2>Câmera</h2>
+        <p>Captura o ambiente real, detecta rostos e mostra bounding boxes com coordenadas VR.</p>
+        <span class="card-hint">Abrir no celular ou computador</span>
+      </div>
+    </a>
+
+    <!-- Cena VR -->
+    <a href="/vr" class="home-card home-card--vr">
+      <div class="card-icon">🕶️</div>
+      <div class="card-body">
+        <h2>Cena VR</h2>
+        <p>Ambiente virtual A-Frame. Cada pessoa detectada aparece aqui como um avatar 3D com nome.</p>
+        <span class="card-hint">Abrir no computador / headset</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Explicação do fluxo -->
+  <section class="flow-section">
+    <h3>Como funciona?</h3>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <span class="step-num">1</span>
+        <span>Câmera captura frame</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-num">2</span>
+        <span>Servidor detecta rostos com OpenCV</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-num">3</span>
+        <span>Pixels → coordenadas 3D</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <span class="step-num">4</span>
+        <span>Avatar aparece na cena VR</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>
