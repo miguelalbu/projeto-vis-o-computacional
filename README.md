@@ -128,52 +128,6 @@ O servidor sobe em `http://0.0.0.0:5000`.
 
 > **Dica para usar no celular:** descubra o IP da sua máquina na rede local (ex: `192.168.1.10`) e acesse `http://192.168.1.10:5000/camera` pelo celular. O servidor e o celular precisam estar na mesma rede Wi-Fi.
 
----
-
-## 🔬 Investigação realizada
-
-### 📏 Distância
-
-| Cenário | Resultado |
-|---|---|
-| Pessoa perto (< 1 m) | |
-| Pessoa longe (> 2 m) | |
-| Pessoa muito longe (> 4 m) | |
-
-<!-- Descreva aqui o que observou nos testes de distância -->
-
----
-
-### 😷 Acessórios
-
-| Acessório | Detectado? | Observação |
-|---|---|---|
-| Óculos comuns | | |
-| Óculos escuros | | |
-| Máscara facial | | |
-| Boné com aba | | |
-| Capuz | | |
-
-<!-- Descreva aqui o que observou nos testes de acessórios -->
-
----
-
-### 🔄 Movimento e delay
-
-<!-- Descreva aqui: o avatar acompanha bem? Existe atraso visível? Estimativa de delay em ms? -->
-
----
-
-### 👥 Múltiplas pessoas
-
-| Quantidade | Funciona? | Observação |
-|---|---|---|
-| 1 pessoa | | |
-| 2 pessoas | | |
-| 3 pessoas | | |
-| 4+ pessoas | | |
-
-<!-- Descreva aqui o comportamento com múltiplas pessoas -->
 
 ---
 
